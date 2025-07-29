@@ -29,11 +29,25 @@ export interface Location {
   name: string;
   slug: string;
   description?: string;
+  region?: string;
+  featured?: boolean;
   coverageArea: string[];
+  coverageAreas?: string[]; // Alias for backward compatibility
+  phone?: string;
+  email?: string;
+  contact?: {
+    phone?: string;
+    email?: string;
+    address?: string;
+  };
   contactInfo?: {
     phone?: string;
     email?: string;
     address?: string;
+  };
+  coordinates?: {
+    lat: number;
+    lng: number;
   };
   faqItems?: FAQ[];
   mapEmbedUrl?: string;

@@ -100,42 +100,40 @@
 							{location.description}
 						</p>
 						
-						<!-- Coverage Areas -->
-						{#if location.coverageAreas && location.coverageAreas.length > 0}
-							<div class="mb-4">
-								<h4 class="font-semibold mb-2">Coverage Areas:</h4>
-								<div class="flex flex-wrap gap-1">
-									{#each location.coverageAreas.slice(0, 4) as area}
-										<Badge variant="secondary" class="text-xs">{area}</Badge>
-									{/each}
-									{#if location.coverageAreas.length > 4}
-										<Badge variant="outline" class="text-xs">+{location.coverageAreas.length - 4} more</Badge>
-									{/if}
-								</div>
-							</div>
-						{/if}
+		<!-- Coverage Areas -->
+		{#if location.coverageArea && location.coverageArea.length > 0}
+			<div class="mb-4">
+				<h4 class="font-semibold mb-2">Coverage Areas:</h4>
+				<div class="flex flex-wrap gap-1">
+					{#each location.coverageArea.slice(0, 4) as area}
+						<Badge variant="secondary" class="text-xs">{area}</Badge>
+					{/each}
+					{#if location.coverageArea.length > 4}
+						<Badge variant="outline" class="text-xs">+{location.coverageArea.length - 4} more</Badge>
+					{/if}
+				</div>
+			</div>
+		{/if}
 
-						<!-- Contact Info -->
-						<div class="mb-4 space-y-2">
-							{#if location.phone}
-								<div class="text-sm">
-									<span class="font-semibold">Phone:</span> 
-									<a href="tel:{location.phone}" class="text-primary hover:underline">
-										{location.phone}
-									</a>
-								</div>
-							{/if}
-							{#if location.email}
-								<div class="text-sm">
-									<span class="font-semibold">Email:</span> 
-									<a href="mailto:{location.email}" class="text-primary hover:underline">
-										{location.email}
-									</a>
-								</div>
-							{/if}
-						</div>
-
-						<!-- CTA -->
+		<!-- Contact Info -->
+		<div class="mb-4 space-y-2">
+			{#if location.contactInfo?.phone}
+				<div class="text-sm">
+					<span class="font-semibold">Phone:</span> 
+					<a href="tel:{location.contactInfo.phone}" class="text-primary hover:underline">
+						{location.contactInfo.phone}
+					</a>
+				</div>
+			{/if}
+			{#if location.contactInfo?.email}
+				<div class="text-sm">
+					<span class="font-semibold">Email:</span> 
+					<a href="mailto:{location.contactInfo.email}" class="text-primary hover:underline">
+						{location.contactInfo.email}
+					</a>
+				</div>
+			{/if}
+		</div>						<!-- CTA -->
 						<div class="mt-auto space-y-2">
 							<Button href="/locations/{location.slug}" class="w-full">
 								View {location.name} Details

@@ -66,7 +66,7 @@
 				<p class="text-xl text-muted-foreground mb-6">{location.description}</p>
 				
 				<div class="mb-6 space-y-2">
-					{#if location.contact.phone}
+					{#if location.contact?.phone}
 						<div class="flex items-center">
 							<span class="font-semibold mr-2">Call:</span>
 							<a href="tel:{location.contact.phone}" class="text-primary hover:underline text-lg">
@@ -74,7 +74,7 @@
 							</a>
 						</div>
 					{/if}
-					{#if location.contact.email}
+					{#if location.contact?.email}
 						<div class="flex items-center">
 							<span class="font-semibold mr-2">Email:</span>
 							<a href="mailto:{location.contact.email}" class="text-primary hover:underline">
@@ -86,7 +86,11 @@
 
 				<div class="flex flex-col sm:flex-row gap-4">
 					<Button href="/contact?location={location.slug}" size="lg">Get Free Quote</Button>
-					<Button href="tel:{location.contact.phone}" variant="outline" size="lg">Call Now</Button>
+					{#if location.contact?.phone}
+						<Button href="tel:{location.contact.phone}" variant="outline" size="lg">Call Now</Button>
+					{:else}
+						<Button href="tel:+1-604-123-4567" variant="outline" size="lg">Call Now</Button>
+					{/if}
 				</div>
 			</div>
 			
@@ -164,7 +168,7 @@
 					width="100%" 
 					height="100%" 
 					style="border:0;" 
-					allowfullscreen="" 
+					allowfullscreen={true}
 					loading="lazy" 
 					referrerpolicy="no-referrer-when-downgrade"
 					title="{location.name} Service Area Map"

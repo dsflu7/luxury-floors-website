@@ -3,7 +3,6 @@
 	import { page } from '$app/stores';
 	import { getServiceBySlug } from '$lib/data/services';
 	import { generateMetaTags } from '$lib/utils/seo';
-	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '$lib/components/ui/card';
 	import * as Card from '$lib/components/ui/card';
 	import * as Carousel from '$lib/components/ui/carousel';
 	import * as Dialog from '$lib/components/ui/dialog';

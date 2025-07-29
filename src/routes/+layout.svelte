@@ -1,13 +1,16 @@
 <script lang="ts">
 	import '../app.css';
 	import { fade } from 'svelte/transition';
-	import { PUBLIC_COMPANY_NAME, PUBLIC_DOMAIN } from '$env/static/public';
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
 	import { Toaster } from '$lib/components/ui/sonner';
 	import { CaretUp } from 'svelte-radix';
 	import { page } from '$app/stores';
 	import { generateOrganizationSchema } from '$lib/utils/seo';
+	
+	// Use hardcoded values for now to avoid env variable issues
+	const companyName = 'Luxury Floors';
+	const publicDomain = 'luxuryfloors.ca';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -22,7 +25,7 @@
 </script>
 
 <svelte:head>
-	<title>{PUBLIC_COMPANY_NAME} - Premium Luxury Floor Installations in Metro Vancouver</title>
+	<title>{companyName} - Premium Luxury Floor Installations in Metro Vancouver</title>
 
 	<!-- Favicon and App Icons -->
 	<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
@@ -70,7 +73,7 @@
 
 	<!-- Preconnect for performance -->
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
 
 	<!-- Schema.org structured data -->
 	{@html `<script type="application/ld+json">${JSON.stringify(organizationSchema)}</script>`}
