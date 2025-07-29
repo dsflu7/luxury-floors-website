@@ -1,11 +1,13 @@
 <script lang="ts">
 	import '../app.css';
 	import { fade } from 'svelte/transition';
-	import { PUBLIC_COMPANY_NAME } from '$env/static/public';
+	import { PUBLIC_COMPANY_NAME, PUBLIC_DOMAIN } from '$env/static/public';
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
 	import { Toaster } from '$lib/components/ui/sonner';
 	import { CaretUp } from 'svelte-radix';
+	import { page } from '$app/stores';
+	import { generateOrganizationSchema } from '$lib/utils/seo';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -13,11 +15,16 @@
 
 	let scrollY = $state(0);
 	let { children }: Props = $props();
+
+	// Generate default SEO data
+	let domain = $derived(`${$page.url.protocol}//${$page.url.host}`);
+	let organizationSchema = $derived(generateOrganizationSchema(domain));
 </script>
 
 <svelte:head>
-	<title>{PUBLIC_COMPANY_NAME}</title>
+	<title>{PUBLIC_COMPANY_NAME} - Premium Luxury Floor Installations in Metro Vancouver</title>
 
+	<!-- Favicon and App Icons -->
 	<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
 	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 	<link rel="shortcut icon" href="/favicon.ico" />
@@ -25,31 +32,48 @@
 	<meta name="apple-mobile-web-app-title" content="Luxury Floors" />
 	<link rel="manifest" href="/site.webmanifest" />
 
-	<meta name="description" content="High-end flooring solutions for your home or business." />
-	<meta
-		name="keywords"
-		content="luxury floors, premium flooring, interior design, home improvement"
-	/>
-	<meta property="og:title" content="Luxury Floors" />
-	<meta
-		property="og:description"
-		content="High-end flooring solutions for your home or business."
-	/>
-	<meta property="og:image" content="/favicon-96x96.png" />
-	<meta property="og:url" content="https://www.luxuryfloors.ca" />
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content="Luxury Floors" />
-	<meta
-		name="twitter:description"
-		content="High-end flooring solutions for your home or business."
-	/>
-	<meta name="twitter:image" content="/favicon-96x96.png" />
-	<meta name="author" content="Luxury Floors Inc." />
-	<meta name="geo.placename" content="British Columbia, Canada" />
+	<!-- Primary Meta Tags -->
+	<meta name="title" content="Luxury Floors - Premium Metallic Epoxy Floors | 25-Year Warranty" />
+	<meta name="description" content="Premium luxury floor installations in Metro Vancouver. Specializing in metallic epoxy floors, flake epoxy, epoxy countertops, and decorative coatings with 25-year warranty. Certified by Leggari & Chromology." />
+	<meta name="keywords" content="metallic epoxy floors, flake epoxy flooring, epoxy countertops, luxury floors, decorative concrete, Vancouver flooring, BC floor installation, premium flooring, 25 year warranty" />
+	<meta name="author" content="Luxury Floors" />
+	<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+	<meta name="googlebot" content="index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1" />
+
+	<!-- Open Graph / Facebook -->
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content={domain} />
+	<meta property="og:title" content="Luxury Floors - Premium Metallic Epoxy Floors | 25-Year Warranty" />
+	<meta property="og:description" content="Premium luxury floor installations in Metro Vancouver. Specializing in metallic epoxy floors, flake epoxy, epoxy countertops, and decorative coatings with 25-year warranty." />
+	<meta property="og:image" content="{domain}/assets/logo.png" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta property="og:locale" content="en_CA" />
+	<meta property="og:site_name" content="Luxury Floors" />
+
+	<!-- Twitter -->
+	<meta property="twitter:card" content="summary_large_image" />
+	<meta property="twitter:url" content={domain} />
+	<meta property="twitter:title" content="Luxury Floors - Premium Metallic Epoxy Floors | 25-Year Warranty" />
+	<meta property="twitter:description" content="Premium luxury floor installations in Metro Vancouver. Specializing in metallic epoxy floors, flake epoxy, epoxy countertops, and decorative coatings with 25-year warranty." />
+	<meta property="twitter:image" content="{domain}/assets/logo.png" />
+
+	<!-- Geographic Information -->
+	<meta name="geo.placename" content="Metro Vancouver, British Columbia, Canada" />
 	<meta name="geo.region" content="CA-BC" />
-	
-	<!-- SEO: Robots and Sitemap -->
+	<meta name="geo.position" content="49.2827;-123.1207" />
+	<meta name="ICBM" content="49.2827, -123.1207" />
+
+	<!-- SEO: Sitemap and Verification -->
 	<link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+	<link rel="canonical" href={domain + $page.url.pathname} />
+
+	<!-- Preconnect for performance -->
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+	<!-- Schema.org structured data -->
+	{@html `<script type="application/ld+json">${JSON.stringify(organizationSchema)}</script>`}
 </svelte:head>
 
 <svelte:window bind:scrollY />
