@@ -230,49 +230,83 @@ export function generateLocationSchema(location: Location, domain: string = 'htt
 }
 
 // Blog post schema generator
-export function generateBlogPostSchema(post: BlogPost, domain: string = 'https://www.luxuryfloors.ca') {
+export function generateLocalBusinessSchema(location: any, domain: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": `Luxury Floors - ${location.name}`,
+    "description": location.description,
+    "url": `${domain}/locations/${location.slug}`,
+    "telephone": location.contact.phone,
+    "email": location.contact.email,
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": location.name,
+      "addressRegion": "BC",
+      "addressCountry": "CA"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": location.coordinates?.lat || 49.2827,
+      "longitude": location.coordinates?.lng || -123.1207
+    },
+    "areaServed": location.coverageAreas?.map((area: string) => ({
+      "@type": "City",
+      "name": area
+    })) || [],
+    "serviceArea": {
+      "@type": "GeoCircle",
+      "geoMidpoint": {
+        "@type": "GeoCoordinates",
+        "latitude": location.coordinates?.lat || 49.2827,
+        "longitude": location.coordinates?.lng || -123.1207
+      },
+      "geoRadius": "25000"
+    },
+    "openingHours": [
+      "Mo-Fr 08:00-18:00",
+      "Sa-Su 09:00-16:00"
+    ],
+    "priceRange": "$$$$",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "127"
+    },
+    "sameAs": [
+      "https://www.facebook.com/luxuryfloors",
+      "https://www.instagram.com/luxuryfloors",
+      "https://www.linkedin.com/company/luxuryfloors"
+    ]
+  };
+}
+
+export function generateBlogPostSchema(post: any, domain: string) {
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "@id": `${domain}/blog/${post.slug.current}/#article`,
     "headline": post.title,
-    "description": post.previewDescription,
-    "url": `${domain}/blog/${post.slug.current}`,
-    "datePublished": post.publishedAt,
-    "dateModified": post.publishedAt,
+    "description": post.excerpt,
     "author": {
       "@type": "Person",
-      "name": post.author?.name || "Luxury Floors Team",
-      "url": `${domain}/our-story`
+      "name": post.author || "Luxury Floors Team"
     },
     "publisher": {
       "@type": "Organization",
-      "@id": `${domain}/#organization`,
       "name": "Luxury Floors",
       "logo": {
         "@type": "ImageObject",
         "url": `${domain}/assets/logo.png`
       }
     },
+    "datePublished": post.publishedAt,
+    "dateModified": post.updatedAt || post.publishedAt,
+    "image": post.featuredImage ? `${domain}${post.featuredImage}` : `${domain}/assets/logo.png`,
+    "url": `${domain}/blog/${post.slug}`,
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": `${domain}/blog/${post.slug.current}`
-    },
-    "articleSection": post.categories.join(', '),
-    "keywords": post.seoKeywords?.join(', ') || post.categories.join(', '),
-    "wordCount": post.readTime ? post.readTime * 250 : undefined, // Approximate word count
-    "timeRequired": post.readTime ? `PT${post.readTime}M` : undefined,
-    "inLanguage": "en-CA",
-    "about": {
-      "@type": "Thing",
-      "name": "Luxury Flooring",
-      "description": "Premium epoxy flooring, countertops, and decorative coating services"
-    },
-    "mentions": post.categories.map(category => ({
-      "@type": "Thing",
-      "name": category
-    })),
-    "image": post.featuredImage ? `${domain}${post.featuredImage}` : `${domain}/assets/logo.png`
+      "@id": `${domain}/blog/${post.slug}`
+    }
   };
 }
 
