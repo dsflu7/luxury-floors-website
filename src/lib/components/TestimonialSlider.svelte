@@ -88,6 +88,8 @@
 		bind:this={containerRef}
 		onmouseenter={stopAutoPlay}
 		onmouseleave={() => autoPlay && startAutoPlay()}
+		role="region"
+		aria-label="Customer testimonials carousel"
 	>
 		<!-- Main testimonial display -->
 		<div class="overflow-hidden rounded-lg bg-white shadow-lg">

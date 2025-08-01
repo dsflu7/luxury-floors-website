@@ -3,15 +3,17 @@
 	import { gsap } from 'gsap';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { scrollThreshold } from '$lib/animations.store';
-	import { ScrollArea } from '$lib/components/ui/scroll-area';
-	import * as Card from '$lib/components/ui/card';
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { isMobile, services, servicesPageNavigating } from '$lib/stores.svelte';
 	import Image from '$lib/components/Image.svelte';
-	import { optimize } from '$lib/image';
 	import Logo from '$lib/icons/Logo.svelte';
+	import ServiceCard from '$lib/components/ServiceCard.svelte';
+	import TestimonialSlider from '$lib/components/TestimonialSlider.svelte';
+	import FAQAccordion from '$lib/components/FAQAccordion.svelte';
+	import SEO from '$lib/components/SEO.svelte';
+	import { generateWebPageSchema } from '$lib/utils/structuredData';
 
 	let initScroll = $state(0);
 	let tweenInstance: gsap.core.Tween;
@@ -81,35 +83,108 @@
 
 	const testimonials = [
 		{
-			author: 'Sarah L.',
-			testimonial:
-				"I couldn't be happier with my new metallic epoxy floor! Luxury Floors transformed my basement into a stunning space that looks like a high-end showroom. The team was professional, detail-oriented, and delivered exactly what they promised. Highly recommend them for anyone looking for premium flooring solutions."
+			name: 'Sarah L.',
+			content: "I couldn't be happier with my new metallic epoxy floor! Luxury Floors transformed my basement into a stunning space that looks like a high-end showroom. The team was professional, detail-oriented, and delivered exactly what they promised. Highly recommend them for anyone looking for premium flooring solutions.",
+			rating: 5,
+			location: 'Vancouver, BC'
 		},
 		{
-			author: 'David R.',
-			testimonial:
-				'We hired Luxury Floors to upgrade our retail store, and the results were beyond our expectations. The flake epoxy floor not only looks fantastic but is also incredibly durable and easy to clean. Our customers constantly compliment the sleek and modern design.'
+			name: 'David R.',
+			content: 'We hired Luxury Floors to upgrade our retail store, and the results were beyond our expectations. The flake epoxy floor not only looks fantastic but is also incredibly durable and easy to clean. Our customers constantly compliment the sleek and modern design.',
+			rating: 5,
+			company: 'Downtown Retail Store'
 		},
 		{
-			author: 'Jessica R.',
-			testimonial:
-				"Luxury Floors lives up to its name! Their custom metallic floor has completely transformed the look of our home's entryway. The installation process was smooth, and the team was very knowledgeable, answering all our questions. A five-star experience."
+			name: 'Jessica R.',
+			content: "Luxury Floors lives up to its name! Their custom metallic floor has completely transformed the look of our home's entryway. The installation process was smooth, and the team was very knowledgeable, answering all our questions. A five-star experience.",
+			rating: 5,
+			location: 'Richmond, BC'
 		},
 		{
-			author: 'James P.',
-			testimonial:
-				"Our garage floor was in bad shape, and we needed something durable yet attractive. Luxury Floors installed a flake epoxy floor that's both tough and beautiful. It's perfect for heavy use and adds so much value to our property. Thank you for the amazing work."
+			name: 'James P.',
+			content: "Our garage floor was in bad shape, and we needed something durable yet attractive. Luxury Floors installed a flake epoxy floor that's both tough and beautiful. It's perfect for heavy use and adds so much value to our property. Thank you for the amazing work.",
+			rating: 5,
+			location: 'Surrey, BC'
 		},
 		{
-			author: 'Andrew S.',
-			testimonial: 'Top-notch service and quality. My floors look amazing!'
+			name: 'Andrew S.',
+			content: 'Top-notch service and quality. My floors look amazing!',
+			rating: 5
 		},
 		{
-			author: 'Amrit B.',
-			testimonial:
-				"Luxury Floors exceeded our expectations with their exceptional craftsmanship and attention to detail. The custom metallic epoxy floor they installed in our living room is a true work of art. It's durable, easy to maintain, and adds a unique touch of elegance to our home. We've already recommended them to friends and family."
+			name: 'Amrit B.',
+			content: "Luxury Floors exceeded our expectations with their exceptional craftsmanship and attention to detail. The custom metallic epoxy floor they installed in our living room is a true work of art. It's durable, easy to maintain, and adds a unique touch of elegance to our home. We've already recommended them to friends and family.",
+			rating: 5,
+			location: 'Burnaby, BC'
 		}
 	];
+
+	const serviceCards = [
+		{
+			title: 'Metallic Epoxy Flooring',
+			description: 'A Durable, High-Gloss Flooring Solution with Unique Swirl Effects',
+			image: '/assets/landing/more1.jpeg',
+			features: ['Unique metallic patterns', 'High-gloss finish', '25-year warranty'],
+			href: `/services/metalic-epoxy-floors`
+		},
+		{
+			title: 'Flake Epoxy Flooring', 
+			description: 'A Slip-Resistant, Textured Flooring with Customizable Colors and Patterns',
+			image: '/assets/landing/more2.jpeg',
+			features: ['Slip-resistant texture', 'Customizable colors', 'Easy maintenance'],
+			href: `/services/flake-epoxy-floors`
+		},
+		{
+			title: 'Epoxy Countertops',
+			description: 'A Seamless, High-Gloss Surface with Exceptional Durability and Style',
+			image: '/assets/landing/more3.jpeg',
+			features: ['Seamless surface', 'Heat resistant', 'Custom designs'],
+			href: `/services/epoxy-countertops`
+		},
+		{
+			title: 'Texture Deck',
+			description: 'Enhance Your Deck with a Slip-Resistant, Durable, and Stylish Finish',
+			image: '/assets/landing/more4.jpeg',
+			features: ['Weather resistant', 'Non-slip surface', 'Long-lasting'],
+			href: `/services/texture-deck`
+		},
+		{
+			title: 'Concrete Walls',
+			description: 'Enhance Your Walls with a Slip-Resistant, Durable, and Stylish Finish',
+			image: '/assets/landing/more5.jpeg',
+			features: ['Modern appearance', 'Durable coating', 'Custom textures'],
+			href: `/services/concrete-walls`
+		}
+	];
+
+	const frequentlyAskedQuestions = [
+		{
+			question: 'How long does epoxy flooring last?',
+			answer: 'Our premium epoxy floors come with a 25-year warranty and are designed to last decades with proper care. The high-quality materials and professional installation ensure exceptional durability.'
+		},
+		{
+			question: 'Is epoxy flooring suitable for residential use?',
+			answer: 'Absolutely! Epoxy flooring is perfect for homes, offering beautiful aesthetics, easy maintenance, and exceptional durability for basements, garages, kitchens, and living areas.'
+		},
+		{
+			question: 'How long does the installation process take?',
+			answer: 'Most residential projects take 2-3 days to complete, including preparation, application, and curing time. We will provide a detailed timeline during your consultation.'
+		},
+		{
+			question: 'Do you offer free estimates?',
+			answer: 'Yes, we provide free, no-obligation estimates for all our services. Contact us to schedule a consultation and receive your personalized quote.'
+		}
+	];
+
+	// Generate structured data for the homepage
+	const pageSchema = generateWebPageSchema({
+		name: 'Luxury Floors - Premium Epoxy Flooring in British Columbia',
+		description: 'Premium, seamless, and durable epoxy floors for modern homes and commercial spaces in Vancouver, Surrey, Richmond, and throughout BC.',
+		url: $page.url.href,
+		breadcrumbs: [
+			{ name: 'Home', url: '/' }
+		]
+	});
 
 	onMount(() => {
 		tweenInstance = gsap.to('#logo', {
@@ -142,6 +217,13 @@
 		}
 	});
 </script>
+
+<SEO 
+	title="Luxury Floors - Premium Epoxy Flooring in British Columbia"
+	description="Premium, seamless, and durable epoxy floors for modern homes and commercial spaces in Vancouver, Surrey, Richmond, and throughout BC."
+	keywords="luxury floors, epoxy flooring, metallic epoxy, flake epoxy, epoxy countertops, Vancouver, Surrey, Richmond, BC"
+	structuredData={pageSchema}
+/>
 
 <svelte:window onscroll={handleScroll} bind:scrollY={initScroll} />
 
@@ -225,60 +307,33 @@
 	>
 		<h1 class="text-center text-4xl font-semibold leading-10">Services</h1>
 
-		<div class="grid w-full gap-10 lg:grid-cols-3">
-			{#each knowMorePoints as point, i}
-				<div class="flex flex-col items-center gap-4 text-center">
-					<button
-						onclick={() => goto(`/services/${services[i]}`)}
-						class="aspect-square overflow-hidden rounded-3xl object-cover"
-						aria-label={`Learn more about ${point.title}`}
-					>
-						<Image
-							url={`/assets/landing/more${i + 1}.jpeg`}
-							description=""
-							class="aspect-square h-auto w-full object-cover transition-all duration-500 ease-in-out hover:scale-110"
-							size={[480]}
-							width="480"
-							quality={50}
-						/>
-					</button>
-
-					<span class="font-[Alatsi] text-xl"> {point.title}</span>
-					<span class="font-[Cantarell] text-[#00000099]">{point.desc}</span>
-					<a
-						href="/services/{services[i]}"
-						class="border-b border-b-transparent text-xs italic transition-all duration-300 ease-in-out hover:border-b-black"
-						>Read more...</a
-					>
-				</div>
+		<div class="grid w-full gap-8 lg:grid-cols-3">
+			{#each serviceCards as service, i}
+				<ServiceCard
+					title={service.title}
+					description={service.description}
+					image={service.image}
+					features={service.features}
+					href={service.href}
+				/>
 			{/each}
 		</div>
 	</section>
 
 	<!-- testimonials -->
-	<section class="flex w-full flex-col gap-12 pb-16 text-center lg:gap-16">
-		<h1 class="text-center text-4xl font-semibold leading-10">Testimonials</h1>
+	<section class="flex w-full flex-col gap-12 px-[6%] pb-16 text-center lg:gap-16">
+		<h1 class="text-center text-4xl font-semibold leading-10">What Our Customers Say</h1>
+		
+		<TestimonialSlider {testimonials} autoPlay={true} autoPlayDelay={6000} />
+	</section>
 
-		<ScrollArea orientation="horizontal" class="w-full">
-			<div class="flex flex-row gap-8 px-[30vw] pb-4">
-				{#each testimonials as item, idx (idx)}
-					<Card.Root class="min-h-[65vh] w-[80vw] bg-black lg:w-[30vw]">
-						<Card.Header>
-							<Image url="/assets/quote.png" description="" class="aspect-square w-16" />
-						</Card.Header>
-						<Card.Content>
-							<!-- <ScrollArea> -->
-							<div class="text-left font-semibold text-[#FFFFFFCC] lg:text-xl">
-								{item.testimonial}
-								<br />
-								<span class="text-[#C7A865]">{item.author}</span>
-							</div>
-							<!-- </ScrollArea> -->
-						</Card.Content>
-					</Card.Root>
-				{/each}
-			</div>
-		</ScrollArea>
+	<!-- FAQ Section -->
+	<section class="flex w-full flex-col gap-12 px-[6%] pb-16 lg:gap-16">
+		<h1 class="text-center text-4xl font-semibold leading-10">Frequently Asked Questions</h1>
+		
+		<div class="mx-auto max-w-4xl">
+			<FAQAccordion faqs={frequentlyAskedQuestions} allowMultiple={false} />
+		</div>
 	</section>
 </main>
 

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
 	import Image from '$lib/components/Image.svelte';
+	import { goto } from '$app/navigation';
 
 	interface Props {
 		title: string;
@@ -19,6 +20,10 @@
 		href = '/services',
 		imageAlt = title
 	}: Props = $props();
+
+	function handleLearnMore() {
+		goto(href);
+	}
 </script>
 
 <div class="group relative overflow-hidden rounded-lg bg-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
@@ -57,7 +62,7 @@
 		{/if}
 
 		<Button 
-			href={href}
+			onclick={handleLearnMore}
 			class="w-full bg-[#C7A865] hover:bg-[#B8984A] text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
 		>
 			Learn More
