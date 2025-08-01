@@ -97,6 +97,11 @@
 					onclick={() => ($servicesPageNavigating = true)}
 					class="{colorState ? 'text-white' : 'text-black'} font-semibold">Services</a
 				>
+				
+				<a
+					href="/blog"
+					class="{colorState ? 'text-white' : 'text-black'} font-semibold">Blog</a
+				>
 
 				<a
 					href="https://www.instagram.com/luxuryfloors.ca/"

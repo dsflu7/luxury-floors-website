@@ -1,7 +1,10 @@
+// Sanity CMS Schema Definition for Flooring Services
+// This defines the content structure for managing flooring services in Sanity Studio
 export default {
 	name: 'service',
 	title: 'Flooring Service',
 	type: 'document',
+	description: 'Content management for different flooring services offered (metallic epoxy, flake epoxy, etc.)',
 	fields: [
 		{
 			name: 'title',

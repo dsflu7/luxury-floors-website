@@ -14,6 +14,14 @@
 	import FAQAccordion from '$lib/components/FAQAccordion.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import { generateWebPageSchema } from '$lib/utils/structuredData';
+	import type { PageData } from './$types';
+
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
+	let { testimonials, faqs } = data;
 
 	let initScroll = $state(0);
 	let tweenInstance: gsap.core.Tween;
@@ -81,43 +89,8 @@
 		}
 	];
 
-	const testimonials = [
-		{
-			name: 'Sarah L.',
-			content: "I couldn't be happier with my new metallic epoxy floor! Luxury Floors transformed my basement into a stunning space that looks like a high-end showroom. The team was professional, detail-oriented, and delivered exactly what they promised. Highly recommend them for anyone looking for premium flooring solutions.",
-			rating: 5,
-			location: 'Vancouver, BC'
-		},
-		{
-			name: 'David R.',
-			content: 'We hired Luxury Floors to upgrade our retail store, and the results were beyond our expectations. The flake epoxy floor not only looks fantastic but is also incredibly durable and easy to clean. Our customers constantly compliment the sleek and modern design.',
-			rating: 5,
-			company: 'Downtown Retail Store'
-		},
-		{
-			name: 'Jessica R.',
-			content: "Luxury Floors lives up to its name! Their custom metallic floor has completely transformed the look of our home's entryway. The installation process was smooth, and the team was very knowledgeable, answering all our questions. A five-star experience.",
-			rating: 5,
-			location: 'Richmond, BC'
-		},
-		{
-			name: 'James P.',
-			content: "Our garage floor was in bad shape, and we needed something durable yet attractive. Luxury Floors installed a flake epoxy floor that's both tough and beautiful. It's perfect for heavy use and adds so much value to our property. Thank you for the amazing work.",
-			rating: 5,
-			location: 'Surrey, BC'
-		},
-		{
-			name: 'Andrew S.',
-			content: 'Top-notch service and quality. My floors look amazing!',
-			rating: 5
-		},
-		{
-			name: 'Amrit B.',
-			content: "Luxury Floors exceeded our expectations with their exceptional craftsmanship and attention to detail. The custom metallic epoxy floor they installed in our living room is a true work of art. It's durable, easy to maintain, and adds a unique touch of elegance to our home. We've already recommended them to friends and family.",
-			rating: 5,
-			location: 'Burnaby, BC'
-		}
-	];
+	// Testimonials and FAQs are now loaded from Sanity via +page.ts
+	// Remove static data and use the loaded data from the data prop
 
 	const serviceCards = [
 		{
@@ -157,24 +130,7 @@
 		}
 	];
 
-	const frequentlyAskedQuestions = [
-		{
-			question: 'How long does epoxy flooring last?',
-			answer: 'Our premium epoxy floors come with a 25-year warranty and are designed to last decades with proper care. The high-quality materials and professional installation ensure exceptional durability.'
-		},
-		{
-			question: 'Is epoxy flooring suitable for residential use?',
-			answer: 'Absolutely! Epoxy flooring is perfect for homes, offering beautiful aesthetics, easy maintenance, and exceptional durability for basements, garages, kitchens, and living areas.'
-		},
-		{
-			question: 'How long does the installation process take?',
-			answer: 'Most residential projects take 2-3 days to complete, including preparation, application, and curing time. We will provide a detailed timeline during your consultation.'
-		},
-		{
-			question: 'Do you offer free estimates?',
-			answer: 'Yes, we provide free, no-obligation estimates for all our services. Contact us to schedule a consultation and receive your personalized quote.'
-		}
-	];
+	// FAQ data is now loaded from Sanity - remove static frequentlyAskedQuestions
 
 	// Generate structured data for the homepage
 	const pageSchema = generateWebPageSchema({
@@ -332,7 +288,7 @@
 		<h1 class="text-center text-4xl font-semibold leading-10">Frequently Asked Questions</h1>
 		
 		<div class="mx-auto max-w-4xl">
-			<FAQAccordion faqs={frequentlyAskedQuestions} allowMultiple={false} />
+			<FAQAccordion faqs={faqs} allowMultiple={false} />
 		</div>
 	</section>
 </main>
