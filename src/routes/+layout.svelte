@@ -1,11 +1,12 @@
 <script lang="ts">
 	import '../app.css';
 	import { fade } from 'svelte/transition';
-	import { PUBLIC_COMPANY_NAME } from '$env/static/public';
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
+	import SEO from '$lib/components/SEO.svelte';
 	import { Toaster } from '$lib/components/ui/sonner';
 	import { CaretUp } from 'svelte-radix';
+	import { generateLocalBusinessSchema } from '$lib/utils/structuredData';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -13,40 +14,20 @@
 
 	let scrollY = $state(0);
 	let { children }: Props = $props();
+
+	// Generate structured data for the business
+	const businessSchema = generateLocalBusinessSchema();
 </script>
 
-<svelte:head>
-	<title>{PUBLIC_COMPANY_NAME}</title>
+<SEO structuredData={businessSchema} />
 
+<svelte:head>
 	<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
 	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 	<link rel="shortcut icon" href="/favicon.ico" />
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 	<meta name="apple-mobile-web-app-title" content="Luxury Floors" />
 	<link rel="manifest" href="/site.webmanifest" />
-
-	<meta name="description" content="High-end flooring solutions for your home or business." />
-	<meta
-		name="keywords"
-		content="luxury floors, premium flooring, interior design, home improvement"
-	/>
-	<meta property="og:title" content="Luxury Floors" />
-	<meta
-		property="og:description"
-		content="High-end flooring solutions for your home or business."
-	/>
-	<meta property="og:image" content="/favicon-96x96.png" />
-	<meta property="og:url" content="https://www.luxuryfloors.ca" />
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content="Luxury Floors" />
-	<meta
-		name="twitter:description"
-		content="High-end flooring solutions for your home or business."
-	/>
-	<meta name="twitter:image" content="/favicon-96x96.png" />
-	<meta name="author" content="Luxury Floors Inc." />
-	<meta name="geo.placename" content="British Columbia, Canada" />
-	<meta name="geo.region" content="CA-BC" />
 	
 	<!-- SEO: Robots and Sitemap -->
 	<link rel="sitemap" type="application/xml" href="/sitemap.xml" />
@@ -56,7 +37,6 @@
 
 <Toaster />
 
-<!-- {#key load} -->
 <div class="flex h-screen flex-col justify-between">
 	<Header />
 	<main class="">
@@ -64,7 +44,6 @@
 	</main>
 	<Footer />
 </div>
-<!-- {/key} -->
 
 {#if scrollY !== 0}
 	<button
